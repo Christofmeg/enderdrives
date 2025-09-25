@@ -1,21 +1,19 @@
 package com.sts15.enderdrives.datagen;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
-
+import com.sts15.enderdrives.datagen.assets.EDBlockModelProvider;
+import com.sts15.enderdrives.datagen.assets.EDItemModelProvider;
+import com.sts15.enderdrives.datagen.data.EDRecipeProvider;
 import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.registries.VanillaRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-import com.sts15.enderdrives.datagen.assets.EDBlockModelProvider;
-import com.sts15.enderdrives.datagen.assets.EDItemModelProvider;
-import com.sts15.enderdrives.datagen.data.EDRecipeProvider;
-
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
 
 import static com.sts15.enderdrives.Constants.MOD_ID;
 
@@ -38,7 +36,6 @@ public class EDDataGenerator {
 
         //data
         generator.addProvider(event.includeServer(), new EDRecipeProvider(packOutput, lookupProvider));
-
         generator.addProvider(true, provider);
     }
 }

@@ -1,0 +1,14 @@
+{
+  "type": "ae2:storage_cell_disassembly",
+  "cell": "enderdrives:item_storage_cell_256k",
+  "cell_disassembly_items": [
+    {
+      "count": 1,
+      "id": "enderdrives:cell_component_256k"
+    },
+    {
+      "count": 1,
+      "id": "enderdrives:ender_item_cell_housing"
+    }
+  ]
+}

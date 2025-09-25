@@ -19,7 +19,6 @@ import com.sts15.enderdrives.network.packet.SyncConfigPacket;
 import com.sts15.enderdrives.network.packet.SyncDisabledDrivesPacket;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
@@ -33,7 +32,6 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import java.util.Objects;
@@ -96,8 +94,13 @@ public class EnderDrives {
         if (serverConfig.ENDER_DISK_16K_TOGGLE.get()) bitmask |= 1 << 2;
         if (serverConfig.ENDER_DISK_64K_TOGGLE.get()) bitmask |= 1 << 3;
         if (serverConfig.ENDER_DISK_256K_TOGGLE.get()) bitmask |= 1 << 4;
-        if (serverConfig.ENDER_DISK_CREATIVE_TOGGLE.get()) bitmask |= 1 << 5;
-        if (serverConfig.TAPE_DISK_TOGGLE.get()) bitmask |= 1 << 6;
+        if (serverConfig.ENDER_DISK_1M_TOGGLE.get()) bitmask |= 1 << 5;
+        if (serverConfig.ENDER_DISK_4M_TOGGLE.get()) bitmask |= 1 << 6;
+        if (serverConfig.ENDER_DISK_16M_TOGGLE.get()) bitmask |= 1 << 7;
+        if (serverConfig.ENDER_DISK_64M_TOGGLE.get()) bitmask |= 1 << 8;
+        if (serverConfig.ENDER_DISK_256M_TOGGLE.get()) bitmask |= 1 << 9;
+        if (serverConfig.ENDER_DISK_CREATIVE_TOGGLE.get()) bitmask |= 1 << 10;
+        if (serverConfig.TAPE_DISK_TOGGLE.get()) bitmask |= 1 << 11;
         NetworkHandler.sendToClient(player, new SyncDisabledDrivesPacket(bitmask));
     }
 
@@ -111,6 +114,13 @@ public class EnderDrives {
             StorageCellModels.registerModel(ItemInit.ENDER_DISK_16K.get(), EnderDrives.id("block/drive/ender_cell"));
             StorageCellModels.registerModel(ItemInit.ENDER_DISK_64K.get(), EnderDrives.id("block/drive/ender_cell"));
             StorageCellModels.registerModel(ItemInit.ENDER_DISK_256K.get(), EnderDrives.id("block/drive/ender_cell"));
+
+            StorageCellModels.registerModel(ItemInit.ENDER_DISK_1M.get(), EnderDrives.id("block/drive/ender_cell"));
+            StorageCellModels.registerModel(ItemInit.ENDER_DISK_4M.get(), EnderDrives.id("block/drive/ender_cell"));
+            StorageCellModels.registerModel(ItemInit.ENDER_DISK_16M.get(), EnderDrives.id("block/drive/ender_cell"));
+            StorageCellModels.registerModel(ItemInit.ENDER_DISK_64M.get(), EnderDrives.id("block/drive/ender_cell"));
+            StorageCellModels.registerModel(ItemInit.ENDER_DISK_256M.get(), EnderDrives.id("block/drive/ender_cell"));
+
             StorageCellModels.registerModel(ItemInit.ENDER_DISK_creative.get(), EnderDrives.id("block/drive/ender_cell"));
             StorageCellModels.registerModel(ItemInit.TAPE_DISK.get(), EnderDrives.id("block/drive/tape_cell"));
 
@@ -121,6 +131,13 @@ public class EnderDrives {
                         ItemInit.ENDER_DISK_16K.get(),
                         ItemInit.ENDER_DISK_64K.get(),
                         ItemInit.ENDER_DISK_256K.get(),
+
+                        ItemInit.ENDER_DISK_1M.get(),
+                        ItemInit.ENDER_DISK_4M.get(),
+                        ItemInit.ENDER_DISK_16M.get(),
+                        ItemInit.ENDER_DISK_64M.get(),
+                        ItemInit.ENDER_DISK_256M.get(),
+
                         ItemInit.ENDER_DISK_creative.get(),
                         ItemInit.TAPE_DISK.get()
                 }) {
@@ -173,7 +190,11 @@ public class EnderDrives {
                     },
                     ItemInit.ENDER_DISK_1K.get(), ItemInit.ENDER_DISK_4K.get(),
                     ItemInit.ENDER_DISK_16K.get(), ItemInit.ENDER_DISK_64K.get(),
-                    ItemInit.ENDER_DISK_256K.get(), ItemInit.ENDER_DISK_creative.get(),
+                    ItemInit.ENDER_DISK_256K.get(),
+                    ItemInit.ENDER_DISK_1M.get(), ItemInit.ENDER_DISK_4M.get(),
+                    ItemInit.ENDER_DISK_16M.get(), ItemInit.ENDER_DISK_64M.get(),
+                    ItemInit.ENDER_DISK_256M.get(),
+                    ItemInit.ENDER_DISK_creative.get(),
                     ItemInit.TAPE_DISK.get()
             );
         }
@@ -183,3 +204,6 @@ public class EnderDrives {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
     }
 }
+
+//TODO test recipes when advanced AE and megacells are not loaded
+//TODO seperate frequency from items and fluids

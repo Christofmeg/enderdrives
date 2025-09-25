@@ -17,18 +17,41 @@ public class CreativeTabRegistry {
             .title(Component.translatable("key.categories.enderdrives"))
             .icon(() -> ItemInit.ENDER_DISK_creative.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
+
+                ItemInit.ITEMS.getEntries().forEach(item -> {
+                    output.accept(item.get());
+                });
+                /*
+
                 output.accept(ItemInit.ENDER_STORAGE_COMPONENT_1K.get());
                 output.accept(ItemInit.ENDER_STORAGE_COMPONENT_4K.get());
                 output.accept(ItemInit.ENDER_STORAGE_COMPONENT_16K.get());
                 output.accept(ItemInit.ENDER_STORAGE_COMPONENT_64K.get());
                 output.accept(ItemInit.ENDER_STORAGE_COMPONENT_256K.get());
+
+                output.accept(ItemInit.ENDER_STORAGE_COMPONENT_1M.get());
+                output.accept(ItemInit.ENDER_STORAGE_COMPONENT_4M.get());
+                output.accept(ItemInit.ENDER_STORAGE_COMPONENT_16M.get());
+                output.accept(ItemInit.ENDER_STORAGE_COMPONENT_64M.get());
+                output.accept(ItemInit.ENDER_STORAGE_COMPONENT_256M.get());
+
                 output.accept(ItemInit.ENDER_DISK_1K.get());
                 output.accept(ItemInit.ENDER_DISK_4K.get());
                 output.accept(ItemInit.ENDER_DISK_16K.get());
                 output.accept(ItemInit.ENDER_DISK_64K.get());
                 output.accept(ItemInit.ENDER_DISK_256K.get());
+
+                output.accept(ItemInit.ENDER_DISK_1M.get());
+                output.accept(ItemInit.ENDER_DISK_4M.get());
+                output.accept(ItemInit.ENDER_DISK_16M.get());
+                output.accept(ItemInit.ENDER_DISK_64M.get());
+                output.accept(ItemInit.ENDER_DISK_256M.get());
+
                 output.accept(ItemInit.ENDER_DISK_creative.get());
                 output.accept(ItemInit.TAPE_DISK.get());
+                output.accept(ItemInit.ENDER_ITEM_CELL_HOUSING.get());
+
+                 */
             })
             .build());
 

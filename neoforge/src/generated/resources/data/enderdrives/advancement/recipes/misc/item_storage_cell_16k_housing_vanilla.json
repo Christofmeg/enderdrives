@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cell_component_16k": {
+      "conditions": {
+        "items": [
+          {
+            "items": "enderdrives:cell_component_16k"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "enderdrives:item_storage_cell_16k_housing_vanilla"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cell_component_16k"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "enderdrives:item_storage_cell_16k_housing_vanilla"
+    ]
+  }
+}

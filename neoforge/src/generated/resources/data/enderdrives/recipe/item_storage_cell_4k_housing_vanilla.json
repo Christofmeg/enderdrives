@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "enderdrives:ender_item_cell_housing"
+    },
+    {
+      "item": "enderdrives:cell_component_4k"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "enderdrives:item_storage_cell_4k"
+  }
+}

@@ -17,6 +17,13 @@ public class serverConfig {
     public static ModConfigSpec.BooleanValue ENDER_DISK_16K_TOGGLE;
     public static ModConfigSpec.BooleanValue ENDER_DISK_64K_TOGGLE;
     public static ModConfigSpec.BooleanValue ENDER_DISK_256K_TOGGLE;
+
+    public static ModConfigSpec.BooleanValue ENDER_DISK_1M_TOGGLE;
+    public static ModConfigSpec.BooleanValue ENDER_DISK_4M_TOGGLE;
+    public static ModConfigSpec.BooleanValue ENDER_DISK_16M_TOGGLE;
+    public static ModConfigSpec.BooleanValue ENDER_DISK_64M_TOGGLE;
+    public static ModConfigSpec.BooleanValue ENDER_DISK_256M_TOGGLE;
+
     public static ModConfigSpec.BooleanValue ENDER_DISK_CREATIVE_TOGGLE;
     public static ModConfigSpec.BooleanValue TAPE_DISK_TOGGLE;
 
@@ -29,6 +36,13 @@ public class serverConfig {
     public static ModConfigSpec.IntValue ENDER_DISK_16K_TYPE_LIMIT;
     public static ModConfigSpec.IntValue ENDER_DISK_64K_TYPE_LIMIT;
     public static ModConfigSpec.IntValue ENDER_DISK_256K_TYPE_LIMIT;
+
+    public static ModConfigSpec.IntValue ENDER_DISK_1M_TYPE_LIMIT;
+    public static ModConfigSpec.IntValue ENDER_DISK_4M_TYPE_LIMIT;
+    public static ModConfigSpec.IntValue ENDER_DISK_16M_TYPE_LIMIT;
+    public static ModConfigSpec.IntValue ENDER_DISK_64M_TYPE_LIMIT;
+    public static ModConfigSpec.IntValue ENDER_DISK_256M_TYPE_LIMIT;
+
     public static ModConfigSpec.IntValue ENDER_DISK_CREATIVE_TYPE_LIMIT;
 
     // === Ender Drive Scope Configs ===
@@ -54,7 +68,6 @@ public class serverConfig {
     public static ModConfigSpec.IntValue END_DB_MIN_DB_COMMIT_INTERVAL_MS;
     public static ModConfigSpec.IntValue END_DB_MAX_DB_COMMIT_INTERVAL_MS;
     public static ModConfigSpec.BooleanValue END_DB_DEBUG_LOG;
-
 
     // === Tape Disk Configs ===
     public static final String CATEGORY_TAPEDISK = "tape_disk";
@@ -95,6 +108,13 @@ public class serverConfig {
         ENDER_DISK_16K_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_16k", true);
         ENDER_DISK_64K_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_64k", true);
         ENDER_DISK_256K_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_256k", true);
+
+        ENDER_DISK_1M_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_1m", true);
+        ENDER_DISK_4M_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_4m", true);
+        ENDER_DISK_16M_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_16m", true);
+        ENDER_DISK_64M_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_64m", true);
+        ENDER_DISK_256M_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_256m", true);
+
         ENDER_DISK_CREATIVE_TOGGLE = SERVER_BUILDER.define("enable_ender_disk_creative", true);
         TAPE_DISK_TOGGLE = SERVER_BUILDER.define("enable_tape_disk", true);
         SERVER_BUILDER.pop();
@@ -109,19 +129,39 @@ public class serverConfig {
 
         ENDER_DISK_4K_TYPE_LIMIT = SERVER_BUILDER
                 .comment("Max item types for Ender Disk 4k")
-                .defineInRange("type_limit_4k", 31, 1, 1024);
+                .defineInRange("type_limit_4k", 3, 1, 1024);
 
         ENDER_DISK_16K_TYPE_LIMIT = SERVER_BUILDER
                 .comment("Max item types for Ender Disk 16k")
-                .defineInRange("type_limit_16k", 63, 1, 1024);
+                .defineInRange("type_limit_16k", 7, 1, 1024);
 
         ENDER_DISK_64K_TYPE_LIMIT = SERVER_BUILDER
                 .comment("Max item types for Ender Disk 64k")
-                .defineInRange("type_limit_64k", 127, 1, 1024);
+                .defineInRange("type_limit_64k", 15, 1, 1024);
 
         ENDER_DISK_256K_TYPE_LIMIT = SERVER_BUILDER
                 .comment("Max item types for Ender Disk 256k")
-                .defineInRange("type_limit_256k", 255, 1, 1024);
+                .defineInRange("type_limit_256k", 31, 1, 1024);
+
+        ENDER_DISK_1M_TYPE_LIMIT = SERVER_BUILDER
+                .comment("Max item types for Ender Disk 1M")
+                .defineInRange("type_limit_1m", 63, 1, 1024);
+
+        ENDER_DISK_4M_TYPE_LIMIT = SERVER_BUILDER
+                .comment("Max item types for Ender Disk 4M")
+                .defineInRange("type_limit_4m", 127, 1, 1024);
+
+        ENDER_DISK_16M_TYPE_LIMIT = SERVER_BUILDER
+                .comment("Max item types for Ender Disk 16M")
+                .defineInRange("type_limit_16m", 255, 1, 1024);
+
+        ENDER_DISK_64M_TYPE_LIMIT = SERVER_BUILDER
+                .comment("Max item types for Ender Disk 64M")
+                .defineInRange("type_limit_64m", 511, 1, 1024);
+
+        ENDER_DISK_256M_TYPE_LIMIT = SERVER_BUILDER
+                .comment("Max item types for Ender Disk 256M")
+                .defineInRange("type_limit_256m", 1023, 1, 1024);
 
         ENDER_DISK_CREATIVE_TYPE_LIMIT = SERVER_BUILDER
                 .comment("Max item types for Creative Ender Disk")

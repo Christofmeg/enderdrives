@@ -2,15 +2,20 @@
 navigation:
   parent: enderdrives_intro/enderdrives_intro-index.md
   title: Ender Item Storage Cell
-  icon: enderdrives:ender_disk_1k
+  icon: enderdrives:item_storage_cell_1k
 categories:
   - enderdrives
 item_ids:
-  - enderdrives:ender_disk_1k
-  - enderdrives:ender_disk_4k
-  - enderdrives:ender_disk_16k
-  - enderdrives:ender_disk_64k
-  - enderdrives:ender_disk_256k
+  - enderdrives:item_storage_cell_1k
+  - enderdrives:item_storage_cell_4k
+  - enderdrives:item_storage_cell_16k
+  - enderdrives:item_storage_cell_64k
+  - enderdrives:item_storage_cell_256k
+  - enderdrives:item_storage_cell_1m
+  - enderdrives:item_storage_cell_4m
+  - enderdrives:item_storage_cell_16m
+  - enderdrives:item_storage_cell_64m
+  - enderdrives:item_storage_cell_256m
   - enderdrives:ender_disk_creative
 ---
 
@@ -20,46 +25,91 @@ Ender Drives are powerful drives that allow for global synchronized storage acro
 
 <Row gap="10">
   <Column>
-    <ItemImage id="enderdrives:ender_disk_1k" />
+    <ItemImage id="enderdrives:item_storage_cell_1k" />
   </Column>
   <Column>
-    <ItemLink id="enderdrives:ender_disk_1k" />
-  </Column>
-</Row>
-
-<Row gap="10">
-  <Column>
-    <ItemImage id="enderdrives:ender_disk_4k" />
-  </Column>
-  <Column>
-    <ItemLink id="enderdrives:ender_disk_4k" />
+    <ItemLink id="enderdrives:item_storage_cell_1k" />
   </Column>
 </Row>
 
 <Row gap="10">
   <Column>
-    <ItemImage id="enderdrives:ender_disk_16k" />
+    <ItemImage id="enderdrives:item_storage_cell_4k" />
   </Column>
   <Column>
-    <ItemLink id="enderdrives:ender_disk_16k" />
-  </Column>
-</Row>
-
-<Row gap="10">
-  <Column>
-    <ItemImage id="enderdrives:ender_disk_64k" />
-  </Column>
-  <Column>
-    <ItemLink id="enderdrives:ender_disk_64k" />
+    <ItemLink id="enderdrives:item_storage_cell_4k" />
   </Column>
 </Row>
 
 <Row gap="10">
   <Column>
-    <ItemImage id="enderdrives:ender_disk_256k" />
+    <ItemImage id="enderdrives:item_storage_cell_16k" />
   </Column>
   <Column>
-    <ItemLink id="enderdrives:ender_disk_256k" />
+    <ItemLink id="enderdrives:item_storage_cell_16k" />
+  </Column>
+</Row>
+
+<Row gap="10">
+  <Column>
+    <ItemImage id="enderdrives:item_storage_cell_64k" />
+  </Column>
+  <Column>
+    <ItemLink id="enderdrives:item_storage_cell_64k" />
+  </Column>
+</Row>
+
+<Row gap="10">
+  <Column>
+    <ItemImage id="enderdrives:item_storage_cell_256k" />
+  </Column>
+  <Column>
+    <ItemLink id="enderdrives:item_storage_cell_256k" />
+  </Column>
+</Row>
+
+<Row gap="10">
+  <Column>
+    <ItemImage id="enderdrives:item_storage_cell_1m" />
+  </Column>
+  <Column>
+    <ItemLink id="enderdrives:item_storage_cell_1m" />
+  </Column>
+</Row>
+
+<Row gap="10">
+  <Column>
+    <ItemImage id="enderdrives:item_storage_cell_4m" />
+  </Column>
+  <Column>
+    <ItemLink id="enderdrives:item_storage_cell_4m" />
+  </Column>
+</Row>
+
+<Row gap="10">
+  <Column>
+    <ItemImage id="enderdrives:item_storage_cell_16m" />
+  </Column>
+  <Column>
+    <ItemLink id="enderdrives:item_storage_cell_16m" />
+  </Column>
+</Row>
+
+<Row gap="10">
+  <Column>
+    <ItemImage id="enderdrives:item_storage_cell_64m" />
+  </Column>
+  <Column>
+    <ItemLink id="enderdrives:item_storage_cell_64m" />
+  </Column>
+</Row>
+
+<Row gap="10">
+  <Column>
+    <ItemImage id="enderdrives:item_storage_cell_256m" />
+  </Column>
+  <Column>
+    <ItemLink id="enderdrives:item_storage_cell_256m" />
   </Column>
 </Row>
 

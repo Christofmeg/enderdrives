@@ -1,0 +1,49 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "advanced_ae"
+      }
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "megacells"
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "ae2:quartz_vibrant_glass"
+    },
+    "b": {
+      "item": "ae2:spatial_cell_component_128"
+    },
+    "c": {
+      "item": "ae2:sky_dust"
+    },
+    "d": {
+      "item": "enderdrives:cell_component_4m"
+    },
+    "e": {
+      "item": "ae2:singularity"
+    },
+    "f": {
+      "item": "minecraft:ender_chest"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cdc",
+    "efe"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enderdrives:item_storage_cell_4m"
+  }
+}

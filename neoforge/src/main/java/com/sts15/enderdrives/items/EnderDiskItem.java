@@ -3,31 +3,40 @@ package com.sts15.enderdrives.items;
 import appeng.api.config.FuzzyMode;
 import appeng.api.implementations.menuobjects.IMenuItem;
 import appeng.api.implementations.menuobjects.ItemMenuHost;
-import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKeyType;
+import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.ICellWorkbenchItem;
+import appeng.api.storage.cells.ISaveProvider;
+import appeng.api.storage.cells.StorageCell;
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.core.localization.PlayerMessages;
 import appeng.items.contents.CellConfig;
 import appeng.menu.locator.ItemMenuHostLocator;
+import appeng.recipes.game.StorageCellDisassemblyRecipe;
 import appeng.util.ConfigInventory;
+import appeng.util.InteractionUtil;
 import appeng.util.Platform;
-import com.sts15.enderdrives.config.serverConfig;
 import com.sts15.enderdrives.db.ClientDiskCache;
 import com.sts15.enderdrives.db.DiskTypeInfo;
 import com.sts15.enderdrives.integration.FTBTeamsCompat;
 import com.sts15.enderdrives.network.NetworkHandler;
 import com.sts15.enderdrives.screen.EnderDiskFrequencyScreen;
 import com.sts15.enderdrives.screen.FrequencyScope;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
@@ -35,11 +44,9 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+
+import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem {
 
@@ -50,11 +57,13 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
     private static final String TEAM_NAME_KEY = "ender_team_name";
     private static final String TRANSFER_MODE_KEY = "ender_transfer_mode";
     private final Supplier<Integer> typeLimit;
+    private final AEKeyType keyType;
 
-    public EnderDiskItem(Properties props, Supplier<Integer> typeLimit) {
+    public EnderDiskItem(Properties props, Supplier<Integer> typeLimit, AEKeyType keyType) {
         super(props.stacksTo(1));
         this.typeLimit = typeLimit;
-    }
+        this.keyType = keyType;
+     }
 
     public int getTypeLimit() {
         return typeLimit.get();
@@ -124,7 +133,7 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
         };
 
         lines.add(scopeLine);
-        var config = CellConfig.create(Set.of(AEKeyType.items()), stack);
+        var config = CellConfig.create(Set.of(keyType), stack);
         int partitionCount = config.keySet().size();
         if (partitionCount > 0) {
             String plural = (partitionCount == 1) ? "" : "s";
@@ -207,7 +216,6 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
         });
     }
 
-
     public static void setOwnerUUID(ItemStack stack, UUID uuid) {
         stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, oldData -> {
             CompoundTag tag = oldData.copyTag();
@@ -247,7 +255,7 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
 
     @Override
     public ConfigInventory getConfigInventory(ItemStack stack) {
-        return CellConfig.create(Set.of(AEKeyType.items()), stack);
+        return CellConfig.create(Set.of(keyType), stack);
     }
 
     @Override
@@ -261,22 +269,68 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
-        if (isDisabled(itemStack)) {
-            if (level.isClientSide) {
-                player.displayClientMessage(Component.literal("§cThis EnderDisk is disabled on the server."), true);
+        if (InteractionUtil.isInAlternateUseMode(player)) {
+            this.disassembleDrive(player.getItemInHand(hand), level, player);
+        } else {
+            ItemStack itemStack = player.getItemInHand(hand);
+            if (isDisabled(itemStack)) {
+                if (level.isClientSide) {
+                    player.displayClientMessage(Component.literal("§cThis EnderDisk is disabled on the server."), true);
+                }
+                return InteractionResultHolder.fail(itemStack);
             }
-            return InteractionResultHolder.fail(itemStack);
+            if (level.isClientSide) {
+                int freq = getFrequency(itemStack);
+                FrequencyScope scope = getScope(itemStack);
+                int transferMode = getTransferMode(itemStack);
+                EnderDiskFrequencyScreen.open(freq, scope, transferMode);
+            } else if (player instanceof ServerPlayer serverPlayer) {
+                resolveAndCacheTeamInfo(itemStack, serverPlayer);
+            }
         }
-        if (level.isClientSide) {
-            int freq = getFrequency(itemStack);
-            FrequencyScope scope = getScope(itemStack);
-            int transferMode = getTransferMode(itemStack);
-            EnderDiskFrequencyScreen.open(freq, scope, transferMode);
-        } else if (player instanceof ServerPlayer serverPlayer) {
-            resolveAndCacheTeamInfo(itemStack, serverPlayer);
+        return new InteractionResultHolder(InteractionResult.sidedSuccess(level.isClientSide()), player.getItemInHand(hand));
+    }
+
+    private boolean disassembleDrive(ItemStack stack, Level level, Player player) {
+        if (!InteractionUtil.isInAlternateUseMode(player)) {
+            return false;
+        } else {
+            List<ItemStack> disassembledStacks = StorageCellDisassemblyRecipe.getDisassemblyResult(level, stack.getItem());
+            if (disassembledStacks.isEmpty()) {
+                return false;
+            } else {
+                Inventory playerInventory = player.getInventory();
+                if (playerInventory.getSelected() != stack) {
+                    return false;
+                } else {
+                    boolean isEnderDrive = stack.getItem() instanceof EnderDiskItem;
+                    StorageCell inv = StorageCells.getCellInventory(stack, (ISaveProvider)null);
+                    if (inv != null && !isEnderDrive && !inv.getAvailableStacks().isEmpty()) {
+                    //    if (inv != null && !inv.getAvailableStacks().isEmpty()) {
+                        player.displayClientMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text(), true);
+                        return false;
+                    } else {
+                        playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
+                        Iterator var7 = disassembledStacks.iterator();
+
+                        while(var7.hasNext()) {
+                            ItemStack disassembledStack = (ItemStack)var7.next();
+                            playerInventory.placeItemBackInInventory(disassembledStack.copy());
+                        }
+
+                        IUpgradeInventory var10000 = this.getUpgrades(stack);
+                        Objects.requireNonNull(playerInventory);
+                        var10000.forEach(playerInventory::placeItemBackInInventory);
+                        return true;
+                    }
+                }
+            }
         }
-        return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
+    }
+
+    @Override
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        return this.disassembleDrive(stack, context.getLevel(), context.getPlayer()) ? InteractionResult.sidedSuccess(context.getLevel().isClientSide()) : InteractionResult.PASS;
     }
 
     public boolean isDisabled(ItemStack stack) {
@@ -290,8 +344,13 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
         if (item == ItemInit.ENDER_DISK_16K.get()) return 2;
         if (item == ItemInit.ENDER_DISK_64K.get()) return 3;
         if (item == ItemInit.ENDER_DISK_256K.get()) return 4;
-        if (item == ItemInit.ENDER_DISK_creative.get()) return 5;
-        if (item == ItemInit.TAPE_DISK.get()) return 6;
+        if (item == ItemInit.ENDER_DISK_1M.get()) return 5;
+        if (item == ItemInit.ENDER_DISK_4M.get()) return 6;
+        if (item == ItemInit.ENDER_DISK_16M.get()) return 7;
+        if (item == ItemInit.ENDER_DISK_64M.get()) return 8;
+        if (item == ItemInit.ENDER_DISK_256M.get()) return 9;
+        if (item == ItemInit.ENDER_DISK_creative.get()) return 10;
+        if (item == ItemInit.TAPE_DISK.get()) return 11;
         return -1;
     }
 
@@ -301,7 +360,6 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
             FTBTeamsCompat.updateTeamInfo(stack, player);
         } catch (Throwable ignored) {}
     }
-
 
     @Override
     public @Nullable ItemMenuHost<?> getMenuHost(Player player, ItemMenuHostLocator locator, @Nullable BlockHitResult hitResult) {
@@ -322,6 +380,5 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
             return CustomData.of(tag);
         });
     }
-
 
 }

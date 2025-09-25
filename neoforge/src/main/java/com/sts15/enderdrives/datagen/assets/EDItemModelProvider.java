@@ -29,6 +29,13 @@ public class EDItemModelProvider extends ItemModelProvider {
         enderDiskColors(ItemInit.ENDER_DISK_16K);
         enderDiskColors(ItemInit.ENDER_DISK_64K);
         enderDiskColors(ItemInit.ENDER_DISK_256K);
+
+        enderDiskColors(ItemInit.ENDER_DISK_1M);
+        enderDiskColors(ItemInit.ENDER_DISK_4M);
+        enderDiskColors(ItemInit.ENDER_DISK_16M);
+        enderDiskColors(ItemInit.ENDER_DISK_64M);
+        enderDiskColors(ItemInit.ENDER_DISK_256M);
+
         enderDiskColors(ItemInit.ENDER_DISK_creative);
         enderDiskColors(ItemInit.TAPE_DISK);
 
@@ -37,6 +44,13 @@ public class EDItemModelProvider extends ItemModelProvider {
         generated(ItemInit.ENDER_STORAGE_COMPONENT_16K);
         generated(ItemInit.ENDER_STORAGE_COMPONENT_64K);
         generated(ItemInit.ENDER_STORAGE_COMPONENT_256K);
+
+        generated(ItemInit.ENDER_ITEM_CELL_HOUSING);
+        generated(ItemInit.ENDER_STORAGE_COMPONENT_1M);
+        generated(ItemInit.ENDER_STORAGE_COMPONENT_4M);
+        generated(ItemInit.ENDER_STORAGE_COMPONENT_16M);
+        generated(ItemInit.ENDER_STORAGE_COMPONENT_64M);
+        generated(ItemInit.ENDER_STORAGE_COMPONENT_256M);
     }
 
     private void generated(DeferredHolder<Item, ? extends Item> item) {

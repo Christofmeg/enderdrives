@@ -86,11 +86,11 @@ dependencies {
 
     implementation "curse.maven:glodium-957920:5821676"
     implementation "curse.maven:extendedae-892005:6436226"
-    implementation "curse.maven:mega-cells-622112:6329073"
+    compileOnly "curse.maven:mega-cells-622112:6329073"
     implementation "curse.maven:geckolib-388172:6304958"
     implementation "curse.maven:advancedae-1084104:6225993"
 
-    compileOnly "dev.latvian.mods:kubejs-neoforge:2101.7.1-build.181"
+    compileOnly "dev.latvian.mods:kubejs-neoforge:2101.7.+"
 
     compileOnly "dev.architectury:architectury-neoforge:${architectury_api_version}"
     compileOnly "curse.maven:ftb-library-forge-404465:6698124"
@@ -116,6 +116,9 @@ dependencies {
         def version = basename.substring(versionSep + 1)
         implementation "extra-api:$artifactId:$version"
     }
+
+    runtimeOnly "curse.maven:mekanism-268560:7017663"
+    runtimeOnly "curse.maven:applied-mekanistics-574300:5978711"
 
 }
 
@@ -176,6 +179,7 @@ processResources {
         expand "version": project.version
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude '.cache'
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
