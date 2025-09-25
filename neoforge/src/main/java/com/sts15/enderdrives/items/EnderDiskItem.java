@@ -57,7 +57,7 @@ public class EnderDiskItem extends Item implements ICellWorkbenchItem, IMenuItem
     private static final String TEAM_NAME_KEY = "ender_team_name";
     private static final String TRANSFER_MODE_KEY = "ender_transfer_mode";
     private final Supplier<Integer> typeLimit;
-    private final AEKeyType keyType;
+    public final AEKeyType keyType;
 
     public EnderDiskItem(Properties props, Supplier<Integer> typeLimit, AEKeyType keyType) {
         super(props.stacksTo(1));

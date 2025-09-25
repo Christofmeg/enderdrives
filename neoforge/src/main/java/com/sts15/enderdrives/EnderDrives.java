@@ -207,3 +207,4 @@ public class EnderDrives {
 
 //TODO test recipes when advanced AE and megacells are not loaded
 //TODO seperate frequency from items and fluids
+//TODO fix MEGA recipes that are not working when megacells is not present

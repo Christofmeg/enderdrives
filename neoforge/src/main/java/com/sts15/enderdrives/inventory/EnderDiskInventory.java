@@ -43,9 +43,9 @@ public class EnderDiskInventory implements StorageCell {
     private static final boolean DEBUG_LOG = false;
     private static final ThreadLocal<ByteArrayOutputStream> LOCAL_BAOS = ThreadLocal.withInitial(() -> new ByteArrayOutputStream(512));
     private static final ThreadLocal<DataOutputStream> LOCAL_DOS = ThreadLocal.withInitial(() -> new DataOutputStream(LOCAL_BAOS.get()));
+    private final AEKeyType keyType;
 
-
-    public EnderDiskInventory(ItemStack stack) {
+    public EnderDiskInventory(ItemStack stack, AEKeyType keyType) {
         if (!(stack.getItem() instanceof EnderDiskItem item)) {
             throw new IllegalArgumentException("Item is not an EnderDisk!");
         }
@@ -54,6 +54,7 @@ public class EnderDiskInventory implements StorageCell {
         this.typeLimit = item.getTypeLimit();
         this.scopePrefix = EnderDiskItem.getSafeScopePrefix(stack);
         this.disabled = item.isDisabled(stack);
+        this.keyType = keyType;
     }
 
     @Override
@@ -177,7 +178,7 @@ public class EnderDiskInventory implements StorageCell {
     }
 
     private boolean passesFilter(AEKey key) {
-        ConfigInventory configInv = CellConfig.create(Set.of(AEKeyType.items()), stack);
+        ConfigInventory configInv = CellConfig.create(Set.of(keyType), stack);
         for (int i = 0; i < configInv.size(); i++) {
             AEKey slotKey = configInv.getKey(i);
             if (slotKey == null) continue;
@@ -247,7 +248,9 @@ public class EnderDiskInventory implements StorageCell {
     private static class Handler implements ICellHandler {
         @Override public boolean isCell(ItemStack is) { return is != null && is.getItem() instanceof EnderDiskItem; }
         @Override public @Nullable StorageCell getCellInventory(ItemStack is, @Nullable appeng.api.storage.cells.ISaveProvider host) {
-            return isCell(is) ? new EnderDiskInventory(is) : null;
+            if (is.getItem() instanceof EnderDiskItem enderDiskItem) {
+                return isCell(is) ? new EnderDiskInventory(is, enderDiskItem.keyType) : null;
+            } else return null;
         }
     }
 }
