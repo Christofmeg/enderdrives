@@ -17,6 +17,7 @@ out
 # gradle
 build
 .gradle
+.cache/*
 
 # other
 eclipse
@@ -25,3 +26,4 @@ runs
 /neoforge/extra-mods
 /forge
 /fabric
+/neoforge/src/generated/resources/.cache/
